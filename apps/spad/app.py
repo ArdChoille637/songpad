@@ -622,7 +622,7 @@ class App:
         t, d = self.tab, self.d
         drums = t["inst"] == "drums"
         self.begin("%s  bar %d/%d" % (t["name"], self.tbar + 1, len(t["bars"])),
-                   "arrows move 0-9 fret hpslbrvx  Bksp clr N bar ,/. bar")
+                   ("Ent hit xoXgfd@# Bksp N bar" if self.tab["inst"] == "drums" else "0-9 fret h/p/s/l/b/r/v/x Bksp N bar"))
         steps = t["steps"]
         cw = self.cw * (2 if drums else 4)
         x0 = 4 + self.cw * 3
@@ -684,8 +684,15 @@ class App:
             k = str(DIGITS[b])
             from time import ticks_ms
             now = ticks_ms()
-            if cur.isdigit() and len(cur) == 1 and now - self.last_digit_at < 900 and int(cur + k) <= 24:
-                k = cur + k
+            i = len(cur)
+            while i > 0 and cur[i - 1].isdigit():
+                i -= 1
+            head, tail = cur[:i], cur[i:]
+            fast = now - self.last_digit_at < 900
+            if head and head[-1] in "hp/\\br" and not tail:
+                k = head + k  # 5h then 7 -> 5h7
+            elif len(tail) == 1 and fast and int(tail + k) <= 24:
+                k = head + tail + k  # quick second digit: 1 then 2 -> 12
             self.last_digit_at = now
             self.tab_set(k)
         else:
