@@ -780,7 +780,7 @@ class App:
         romans = theory.ROMAN
         for i, c in enumerate(ch):
             r = romans[i] if not self.cminor else romans[i].lower() if i in (0, 3, 4) else romans[i]
-            self.d.text(V(8, y), "%s  %s" % (r.ljust(4), c), FG)
+            self.d.text(V(8, y), "%-4s  %s" % (r, c), FG)
             y += self.lh
         y += 4
         for name, degs in theory.PROGRESSIONS[:4]:

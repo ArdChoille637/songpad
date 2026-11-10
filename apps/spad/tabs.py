@@ -95,8 +95,8 @@ def bar_rows(t, bar):
 
 def row_labels(t):
     if t["inst"] == "drums":
-        return [r.ljust(2) for r in t["rows"]]
-    return [x.ljust(2) for x in t["tuning"]]
+        return ["%-2s" % r for r in t["rows"]]
+    return ["%-2s" % x for x in t["tuning"]]
 
 
 def to_ascii(t, max_cols=80):
